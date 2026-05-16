@@ -131,112 +131,149 @@ button {
 
 <script>
 
-/* Toast Function */
+/* =========================
+   TOAST FUNCTION
+========================= */
 
-function toast(msg){
+function toast(message) {
 
-  const t =
-  document.getElementById("toast");
+  const toastBox = document.getElementById("toast");
 
-  t.textContent = msg;
+  toastBox.innerText = message;
 
-  t.classList.add("show");
+  toastBox.classList.add("show");
 
-  setTimeout(()=>{
+  setTimeout(() => {
 
-    t.classList.remove("show");
+    toastBox.classList.remove("show");
 
-  },2000);
+  }, 2000);
 
 }
 
-/* Login Function */
+/* =========================
+   LOGIN FUNCTION
+========================= */
 
-function login(){
+function login() {
 
-  const name =
-  document
-  .getElementById("username")
-  .value
-  .trim();
+  const username = document
+    .getElementById("username")
+    .value
+    .trim();
 
-  const pass =
-  document
-  .getElementById("password")
-  .value
-  .trim();
+  const password = document
+    .getElementById("password")
+    .value
+    .trim();
 
-  /* Empty Check */
+  /* EMPTY CHECK */
 
-  if(!name || !pass){
+  if (username === "" || password === "") {
 
-    toast(
-      "⚠️ Please fill in all fields."
-    );
+    toast("⚠️ Please fill in all fields");
 
     return;
+
   }
+
+  /* LOADING MESSAGE */
 
   toast("⏳ Checking...");
 
-  /* Fetch API */
+  /* FETCH DATA */
 
-  fetch(
-    "https://sheetdb.io/api/v1/x3mqc5d3c7d88"
-  )
+  fetch("https://sheetdb.io/api/v1/x3mqc5d3c7d88")
 
-  .then(res => res.json())
+    .then(response => response.json())
 
-  .then(data => {
+    .then(data => {
 
-    console.log(data);
+      console.log(data);
 
-    /* Match User */
+      /* FIND USER */
 
-    const user = data.find(item =>
+      const user = data.find(item =>
 
-      item.NAME === name &&
-      item.PASSWORD === pass
+        item.NAME === username &&
+        item.PASSWORD === password
 
-    );
-
-    /* Success */
-
-    if(user){
-
-      toast("✅ Login successful");
-
-      setTimeout(()=>{
-
-        window.location.href =
-        "https://at397988-dev.github.io/timecheck/";
-
-      },800);
-
-    }
-
-    /* Failed */
-
-    else{
-
-      toast(
-        "❌ Name or password is incorrect"
       );
 
-    }
+      /* LOGIN SUCCESS */
 
-  })
+      if (user) {
 
-  .catch(err => {
+        toast("✅ Login successful");
 
-    console.log(err);
+        setTimeout(() => {
 
-    toast("❌ API error");
+          window.location.href =
+            "https://at397988-dev.github.io/timecheck/";
 
-  });
+        }, 1000);
+
+      }
+
+      /* LOGIN FAILED */
+
+      else {
+
+        toast("❌ Incorrect name or password");
+
+      }
+
+    })
+
+    /* ERROR */
+
+    .catch(error => {
+
+      console.log(error);
+
+      toast("❌ Server/API error");
+
+    });
 
 }
 
+/* =========================
+   ENTER KEY LOGIN
+========================= */
+
+document
+  .getElementById("password")
+  .addEventListener("keypress", function (e) {
+
+    if (e.key === "Enter") {
+
+      login();
+
+    }
+
+  });
+
+/* =========================
+   INPUT ANIMATION
+========================= */
+
+const inputs = document.querySelectorAll("input");
+
+inputs.forEach(input => {
+
+  input.addEventListener("focus", () => {
+
+    input.parentElement.classList.add("active");
+
+  });
+
+  input.addEventListener("blur", () => {
+
+    input.parentElement.classList.remove("active");
+
+  });
+
+});
 </script>
 
 </body>
